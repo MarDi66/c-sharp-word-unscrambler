@@ -67,11 +67,11 @@ namespace WordUnscrambler
             DisplayMatchedUnscrambledWords(scrambleWords);
         }
 
-        private static void DisplayMatchedUnscrambledWords(string[] scrambleWords)
+        private static void DisplayMatchedUnscrambledWords(string[] scrambledWords)
         {
             string[] wordList = _fileReader.Read(wordListFileName);
 
-            List<MatchedWord> matchedWords = _wordMatcher.Match(scrambleWords, wordList);
+            List<MatchedWord> matchedWords = _wordMatcher.Match(scrambledWords, wordList);
 
             if (matchedWords.Any())
             {

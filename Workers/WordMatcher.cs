@@ -7,9 +7,33 @@ namespace WordUnscrambler.Workers
 {
     class WordMatcher
     {
-        internal List<MatchedWord> Match(string[] scrambleWords, string[] wordList)
+        public List<MatchedWord> Match(string[] scrambledWords, string[] wordList)
         {
-            throw new NotImplementedException();
+            var matchedWords = new List<MatchedWord>();
+
+            foreach(var scrambledWord in scrambledWords)
+            {
+                foreach (var word in wordList)
+                {
+                    if(scrambledWord.Equals(word, StringComparison.OrdinalIgnoreCase))
+                    {
+                        matchedWords.Add(BuildMatchedWord(scrambledWord, word));
+                    }
+                }
+            }
+
+            return matchedWords;
+        }
+
+        private MatchedWord BuildMatchedWord(string scrambledWord, string word)
+        {
+            MatchedWord matchedWord = new MatchedWord
+            {
+                ScrambledWord = scrambledWord,
+                Word = word
+            };
+
+            return matchedWord;
         }
     }
 }
