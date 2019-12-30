@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using WordUnscrambler.Workers;
+using WordUnscrambler.Data;
 
 namespace WordUnscrambler
 {
     class Program
     {
+        private static readonly FileReader _fileReader = new FileReader();
+        private static readonly WordMatcher _wordMatcher = new WordMatcher();
+        private const string wordListFileName = "wordlist.txt";
+
         static void Main(string[] args)
         {
             bool continueWordUnscramble = true;
@@ -49,10 +55,35 @@ namespace WordUnscrambler
 
         private static void ExecuteScrambledWordsManualEntryScenario()
         {
+            var manualInput = Console.ReadLine() ?? string.Empty;
+            string[] scrambleWords = manualInput.Split(',');
+            DisplayMatchedUnscrambledWords(scrambleWords);
         }
 
         private static void ExecuteScrambledWordsInFileScenario()
         {
+            var filename = Console.ReadLine() ?? string.Empty;
+            string[] scrambleWords = _fileReader.Read(filename);
+            DisplayMatchedUnscrambledWords(scrambleWords);
+        }
+
+        private static void DisplayMatchedUnscrambledWords(string[] scrambleWords)
+        {
+            string[] wordList = _fileReader.Read(wordListFileName);
+
+            List<MatchedWord> matchedWords = _wordMatcher.Match(scrambleWords, wordList);
+
+            if (matchedWords.Any())
+            {
+                foreach(var matchedWord in matchedWords)
+                {
+                    Console.WriteLine("Match found for {0}: {1}", matchedWord.ScrambledWord, matchedWord.Word);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No matches have been found");
+            };
         }
     }
 }
